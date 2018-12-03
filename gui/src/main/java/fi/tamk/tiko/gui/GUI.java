@@ -210,6 +210,9 @@ public class GUI extends Application {
             nameInput.clear();
             quantityInput.clear();
             addButton.setOnAction(e -> addButtonAction());
+
+            table.getItems().add(newObj);
+            table.getItems().remove(newObj);
         }
     }
 
