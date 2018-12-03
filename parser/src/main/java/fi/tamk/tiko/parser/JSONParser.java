@@ -33,18 +33,6 @@ public class JSONParser {
      */
     public void writeJSONString(JSONObject obj, BufferedWriter out) {
         try {
-            /*if (!insideArray) {
-                out.write("{");
-                out.newLine();
-                out.write(tabs(tabNumber));
-            }
-            else {
-                out.newLine();
-                out.write(tabs(tabNumber));
-                out.write("{");
-                out.newLine();
-                out.write(tabs(tabNumber));
-            }*/
             out.write("{");
             out.newLine();
             out.write(tabs(tabNumber));

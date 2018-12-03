@@ -8,9 +8,10 @@ import fi.tamk.tiko.parser.JSONParser;
 public class JSONParserTest {
 
     @Test
-    public void test() {
+    public void testTabs() {
         JSONParser testParser = new JSONParser();
 
         assertEquals("    ", testParser.tabs(1));
+        assertEquals("        ", testParser.tabs(2));
     }
 }

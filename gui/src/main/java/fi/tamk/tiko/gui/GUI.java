@@ -179,15 +179,10 @@ public class GUI extends Application {
         return object;
     }
 
-    public boolean addButtonClicked() {
-        return true;
-    }
-
     /**
      * Adds the product to the list.
      * 
-     * <p>Adds the product to the end of the list if the input fields are filled correctly and
-     * no duplicate product is already on the list.
+     * <p>Adds the product to the end of the list if the input fields are filled correctly.
      */
     public void addButtonAction() {
         if ((!nameInput.getText().equals("") && !quantityInput.getText().equals("")) &&
@@ -201,6 +196,13 @@ public class GUI extends Application {
             quantityInput.clear();
         }   
     }
+
+    /**
+     * Adds the product to the list.
+     * 
+     * <p>Adds the product to the end of the list if the input fields are filled correctly.
+     * @param obj
+     */
     public void addButtonAction(JSONObject obj) {
         if ((!nameInput.getText().equals("") && !quantityInput.getText().equals("")) &&
         isPlusInteger(quantityInput.getText())) {
@@ -334,32 +336,5 @@ public class GUI extends Application {
      */
     public static void main(String [] args) {
         launch();
-
-        /*GUI gui = new GUI();
-        JSONObject o1 = new JSONObject();
-        o1.put("Product", "asd");
-        o1.put("Quantity", "2");
-        o1.put("wdwd", "22");
-
-        LinkedList<JSONObject> list = new LinkedList<>();
-        JSONObject o2 = new JSONObject();
-        JSONObject o3 = new JSONObject();
-        o2.put("ASD", "Pirkale");
-        o2.put("eee", "5");
-        o3.put("QFW", "Aha");
-        list.add(o2);
-        list.add(o3);
-
-        o1.put("LISTA", list);
-
-        try {
-            gui.fstream = new FileWriter("ShoppingList.json");
-            gui.out = new BufferedWriter(gui.fstream);
-
-            gui.parser.writeJSONString(o1, gui.out);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
     }
 }
