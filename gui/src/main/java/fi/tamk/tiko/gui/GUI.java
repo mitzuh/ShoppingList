@@ -157,8 +157,6 @@ public class GUI extends Application {
     public JSONObject editClicked(JSONObject object) {
         nameInput.setText(object.getProduct());
         quantityInput.setText(object.getQuantity());
-
-        System.out.println(object);
         addButton.setOnAction(e -> addButtonAction(object));
         return object;
     }
@@ -206,15 +204,14 @@ public class GUI extends Application {
     public void addButtonAction(JSONObject obj) {
         if ((!nameInput.getText().equals("") && !quantityInput.getText().equals("")) &&
         isPlusInteger(quantityInput.getText())) {
-            JSONObject newObj = new JSONObject();
             obj.put("Product", nameInput.getText());
             obj.put("Quantity", quantityInput.getText());
             nameInput.clear();
             quantityInput.clear();
             addButton.setOnAction(e -> addButtonAction());
-
-            table.getItems().add(newObj);
-            table.getItems().remove(newObj);
+            
+            table.getItems().clear();
+            table.setItems(getProducts());
         }
     }
 
