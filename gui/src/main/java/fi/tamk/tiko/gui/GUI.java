@@ -2,6 +2,7 @@ package fi.tamk.tiko.gui;
 
 import java.awt.FlowLayout;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
@@ -29,6 +30,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
 
@@ -48,8 +50,9 @@ public class GUI extends Application {
     FileWriter fstream;
     BufferedWriter out;
     JSONParser parser;
+    JSONFileReader fileReader;
 
-    Button addButton, saveButton;
+    Button addButton, saveButton, readButton;
 
     LinkedList<JSONObject> jsonObjectList;
 
@@ -62,6 +65,7 @@ public class GUI extends Application {
         fileCreated = false;
         jsonObjectList = new LinkedList<>();
         parser = new JSONParser();
+        fileReader = new JSONFileReader();
     }
 
     /**
@@ -97,6 +101,8 @@ public class GUI extends Application {
         addButton.setOnAction(e -> addButtonAction());
         saveButton = new Button("Save");
         saveButton.setOnAction(e -> saveButtonClicked());
+        readButton = new Button("Read");
+        readButton.setOnAction(e -> readButtonClicked(window));
 
         // Context menu
         contextMenu = new ContextMenu();
@@ -109,7 +115,7 @@ public class GUI extends Application {
         HBox hBox = new HBox();
         hBox.setPadding(new Insets(10,10,10,10));
         hBox.setSpacing(10);
-        hBox.getChildren().addAll(nameInput, quantityInput, addButton, saveButton);
+        hBox.getChildren().addAll(nameInput, quantityInput, addButton, saveButton, readButton);
 
         table = new TableView<>();
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -222,6 +228,29 @@ public class GUI extends Application {
         if(jsonObjectList.size() > 0) {
             writeJSON(jsonObjectList);
         }
+    }
+
+
+    public void readButtonClicked(Stage window) {
+        FileChooser chooser = new FileChooser();
+        LinkedList<JSONObject> newList = new LinkedList<>();
+        chooser.setTitle("Open .json File");
+        File selectedFile = chooser.showOpenDialog(window);
+
+        newList = fileReader.readFile(selectedFile);
+        if(selectedFile != null) {
+            jsonObjectList.clear();
+            table.getItems().clear();
+            for(int i=0; i<newList.size(); i++) {
+                JSONObject tmp = new JSONObject();
+                tmp.put("Product", newList.get(i).get("Product"));
+                tmp.put("Quantity", newList.get(i).get("Quantity"));
+
+                addJSONObjectToList(tmp);
+            }
+            table.setItems(getProducts());
+        }
+        
     }
 
     /**
