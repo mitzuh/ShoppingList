@@ -236,9 +236,9 @@ public class GUI extends Application {
         LinkedList<JSONObject> newList = new LinkedList<>();
         chooser.setTitle("Open .json File");
         File selectedFile = chooser.showOpenDialog(window);
-
-        newList = fileReader.readFile(selectedFile);
+        
         if(selectedFile != null) {
+            newList = fileReader.readFile(selectedFile);
             jsonObjectList.clear();
             table.getItems().clear();
             for(int i=0; i<newList.size(); i++) {
@@ -250,7 +250,6 @@ public class GUI extends Application {
             }
             table.setItems(getProducts());
         }
-        
     }
 
     /**
