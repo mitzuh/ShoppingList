@@ -30,8 +30,10 @@ public class JSONParser {
      * Writes JSONObject values to JSON file.
      * @param obj JSONObject to print on the file.
      * @param out BufferedWriter, which writes the values to the JSON file.
+     * @return True if writing was successful, false if writing failed.
      */
-    public void writeJSONString(JSONObject obj, BufferedWriter out) {
+    public boolean writeJSONString(JSONObject obj, BufferedWriter out) {
+        boolean writingSuccessful = false;
         try {
             out.write("{");
             out.newLine();
@@ -131,10 +133,12 @@ public class JSONParser {
                 out.flush();
                 lastChar = ' ';
             }
+            writingSuccessful = true;
             
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return writingSuccessful;
     }
 
     /**

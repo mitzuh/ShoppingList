@@ -74,7 +74,7 @@ public class GUI extends Application {
     @Override
     public void start(Stage window) {
         System.out.println("Author: Jimi Savola");
-        window.setTitle("Shopping List");  
+        window.setTitle("Shopping List");
 
         // Product name column
         TableColumn<JSONObject, String> nameColumn = new TableColumn<>("Product");
@@ -187,8 +187,10 @@ public class GUI extends Application {
      * Adds the product to the list.
      * 
      * <p>Adds the product to the end of the list if the input fields are filled correctly.
+     * @return True if JSONObject was able to be added to the list, false if not.
      */
-    public void addButtonAction() {
+    public boolean addButtonAction() {
+        boolean actionDone = false;
         if ((!nameInput.getText().equals("") && !quantityInput.getText().equals("")) &&
         isPlusInteger(quantityInput.getText())) {
             JSONObject jsonObject = new JSONObject();
@@ -198,16 +200,20 @@ public class GUI extends Application {
             addJSONObjectToList(jsonObject);
             nameInput.clear();
             quantityInput.clear();
-        }   
+            actionDone = true;
+        }
+        return actionDone;
     }
 
     /**
      * Adds the product to the list.
      * 
      * <p>Adds the product to the end of the list if the input fields are filled correctly.
-     * @param obj
+     * @param obj Object, which was edited.
+     * @return True if JSONObject was able to be added to the list, false if not.
      */
-    public void addButtonAction(JSONObject obj) {
+    public boolean addButtonAction(JSONObject obj) {
+        boolean actionDone = false;
         if ((!nameInput.getText().equals("") && !quantityInput.getText().equals("")) &&
         isPlusInteger(quantityInput.getText())) {
             obj.put("Product", nameInput.getText());
@@ -218,20 +224,32 @@ public class GUI extends Application {
             
             table.getItems().clear();
             table.setItems(getProducts());
+            actionDone = true;
         }
+        return actionDone;
     }
 
     /**
      * Saves the shopping list as a .json file if it is not empty.
+     * @return True if saving was successful, false if saving failed.
      */
-    public void saveButtonClicked() {
+    public boolean saveButtonClicked() {
+        boolean savingSuccessful = false;
         if(jsonObjectList.size() > 0) {
             writeJSON(jsonObjectList);
+            savingSuccessful = true;
         }
+        return savingSuccessful;
     }
 
-
-    public void readButtonClicked(Stage window) {
+    /**
+     * Opens the file explorer and if the selected file is a shopping list file,
+     * it's objects are moved to the GUI and jsonobjectlist.
+     * @param window GUI window
+     * @return True if reading was successful, false if no file was selected.
+     */
+    public boolean readButtonClicked(Stage window) {
+        boolean readingSuccessful = false;
         FileChooser chooser = new FileChooser();
         LinkedList<JSONObject> newList = new LinkedList<>();
         chooser.setTitle("Open .json File");
@@ -249,35 +267,15 @@ public class GUI extends Application {
                 addJSONObjectToList(tmp);
             }
             table.setItems(getProducts());
+            readingSuccessful = true;
         }
-    }
-
-    /**
-     * Checks if the given product name is already on the list.
-     * @param text Text from the latest user input.
-     * @return boolean if duplicate was found or not.
-     */
-    public boolean isDuplicate(String text) {
-        boolean result = false;
-        text = text.toLowerCase();
-        text = text.replaceAll("\\s+", "");
-
-        for(int i=0; i<jsonObjectList.size(); i++) {
-            String comparison = jsonObjectList.get(i).getProduct();
-            comparison = comparison.toLowerCase();
-            comparison = comparison.replaceAll("\\s+", "");
-
-            if(text.equals(comparison)) {
-                result = true;
-            }
-        }
-        return result;
+        return readingSuccessful;
     }
 
     /**
      * Checks if the user given input for quantity is positive integer
      * @param text User quantity input
-     * @return true if positive integer, false if netagive, zero or not an integer.
+     * @return true if positive integer, false if negative, zero or not an integer.
      */
     public boolean isPlusInteger(String text) {
         text = text.replaceAll("\\s+", "");

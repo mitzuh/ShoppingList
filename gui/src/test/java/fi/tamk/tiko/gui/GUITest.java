@@ -9,13 +9,6 @@ import fi.tamk.tiko.parser.JSONObject;
 public class GUITest {
 
     @Test
-    public void testIsDuplicate() {
-        GUI testGUI = new GUI();
-
-        assertEquals(false, testGUI.isDuplicate("asd"));
-    }
-
-    @Test
     public void testIsPlusInteger() {
         GUI testGUI = new GUI();
 
