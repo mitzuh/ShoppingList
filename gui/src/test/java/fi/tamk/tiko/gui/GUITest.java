@@ -7,11 +7,15 @@ import fi.tamk.tiko.gui.GUI;
 import fi.tamk.tiko.parser.JSONObject;
 
 public class GUITest {
+    GUI testGUI = new GUI();
 
     @Test
     public void testIsPlusInteger() {
-        GUI testGUI = new GUI();
-
         assertEquals(true, testGUI.isPlusInteger("3"));
+    }
+
+    @Test
+    public void testSaveButtonClicked() {
+        assertEquals(false, testGUI.saveButtonClicked());
     }
 }

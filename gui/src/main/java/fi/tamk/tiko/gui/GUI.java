@@ -52,7 +52,7 @@ public class GUI extends Application {
     JSONParser parser;
     JSONFileReader fileReader;
 
-    Button addButton, saveButton, readButton;
+    Button addButton, saveButton, readButton, clearButton;
 
     LinkedList<JSONObject> jsonObjectList;
 
@@ -103,6 +103,8 @@ public class GUI extends Application {
         saveButton.setOnAction(e -> saveButtonClicked());
         readButton = new Button("Read");
         readButton.setOnAction(e -> readButtonClicked(window));
+        clearButton = new Button("Clear List");
+        clearButton.setOnAction(e -> clearButtonClicked());
 
         // Context menu
         contextMenu = new ContextMenu();
@@ -115,7 +117,7 @@ public class GUI extends Application {
         HBox hBox = new HBox();
         hBox.setPadding(new Insets(10,10,10,10));
         hBox.setSpacing(10);
-        hBox.getChildren().addAll(nameInput, quantityInput, addButton, saveButton, readButton);
+        hBox.getChildren().addAll(nameInput, quantityInput, addButton, saveButton, readButton, clearButton);
 
         table = new TableView<>();
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -203,6 +205,17 @@ public class GUI extends Application {
             actionDone = true;
         }
         return actionDone;
+    }
+
+    
+    public boolean clearButtonClicked() {
+        boolean clearSuccess = false;
+        if (jsonObjectList.size() > 0) {
+            jsonObjectList.clear();
+            table.getItems().clear();
+            clearSuccess = true;
+        }
+        return clearSuccess;
     }
 
     /**
