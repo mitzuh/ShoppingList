@@ -207,7 +207,10 @@ public class GUI extends Application {
         return actionDone;
     }
 
-    
+    /**
+     * Clears all content from the JSONObject list and the UI.
+     * @return True if content was cleared, false if the list was already empty.
+     */
     public boolean clearButtonClicked() {
         boolean clearSuccess = false;
         if (jsonObjectList.size() > 0) {
