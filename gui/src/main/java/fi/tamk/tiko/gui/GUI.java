@@ -51,8 +51,10 @@ public class GUI extends Application {
     BufferedWriter out;
     JSONParser parser;
     JSONFileReader fileReader;
+    DboxSaver dboxSaver;
+    String fileName;
 
-    Button addButton, saveButton, readButton, clearButton;
+    Button addButton, saveButton, saveDboxButton, readButton, clearButton;
 
     LinkedList<JSONObject> jsonObjectList;
 
@@ -66,6 +68,8 @@ public class GUI extends Application {
         jsonObjectList = new LinkedList<>();
         parser = new JSONParser();
         fileReader = new JSONFileReader();
+        dboxSaver = new DboxSaver();
+        fileName = "ShoppingList.json";
     }
 
     /**
@@ -101,6 +105,8 @@ public class GUI extends Application {
         addButton.setOnAction(e -> addButtonAction());
         saveButton = new Button("Save");
         saveButton.setOnAction(e -> saveButtonClicked());
+        saveDboxButton = new Button("Save to Dropbox");
+        saveDboxButton.setOnAction(e -> saveDboxClicked());
         readButton = new Button("Read");
         readButton.setOnAction(e -> readButtonClicked(window));
         clearButton = new Button("Clear List");
@@ -114,10 +120,15 @@ public class GUI extends Application {
         item2.setOnAction(e -> removeClicked(getObject()));
         contextMenu.getItems().addAll(item1, item2);
 
-        HBox hBox = new HBox();
-        hBox.setPadding(new Insets(10,10,10,10));
-        hBox.setSpacing(10);
-        hBox.getChildren().addAll(nameInput, quantityInput, addButton, saveButton, readButton, clearButton);
+        HBox hBox1 = new HBox();
+        hBox1.setPadding(new Insets(10,10,10,10));
+        hBox1.setSpacing(10);
+        hBox1.getChildren().addAll(nameInput, quantityInput, addButton, clearButton);
+
+        HBox hBox2 = new HBox();
+        hBox2.setPadding(new Insets(10,10,10,10));
+        hBox2.setSpacing(10);
+        hBox2.getChildren().addAll(readButton, saveButton, saveDboxButton);
 
         table = new TableView<>();
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -140,7 +151,7 @@ public class GUI extends Application {
         table.setItems(getProducts());
 
         VBox vBox = new VBox();
-        vBox.getChildren().addAll(table, hBox);
+        vBox.getChildren().addAll(table, hBox1, hBox2);
 
         Scene scene = new Scene(vBox, 640,480);
         window.setScene(scene);
@@ -259,6 +270,23 @@ public class GUI extends Application {
     }
 
     /**
+     * Saves the shopping list -file into Dropbox.
+     * @return True if able to save, false if not
+     */
+    public boolean saveDboxClicked() {
+        boolean uploadSuccessful = false;
+        if (saveButtonClicked()) {
+            try {
+                uploadSuccessful = dboxSaver.saveToDbox(fileName);
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return uploadSuccessful;
+    }
+
+    /**
      * Opens the file explorer and if the selected file is a shopping list file,
      * it's objects are moved to the GUI and jsonobjectlist.
      * @param window GUI window
@@ -359,7 +387,7 @@ public class GUI extends Application {
 
         try {
             JSONObject obj = new JSONObject();
-            fstream = new FileWriter("ShoppingList.json");
+            fstream = new FileWriter(fileName);
             out = new BufferedWriter(fstream);
             obj.put("Shopping List", objects);
             parser.writeJSONString(obj, out);
